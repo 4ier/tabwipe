@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>TabWipe Settings</title>
+    <link rel="stylesheet" href="options.css" />
+  </head>
+  <body>
+    <main class="page">
+      <header class="hero panel">
+        <div>
+          <p class="eyebrow">TabWipe Settings</p>
+          <h1>Your cookies, your rules</h1>
+          <p class="subtext">
+            Configure auto-delete behavior, manage trusted domains, and unlock
+            advanced Pro cleanup rules.
+          </p>
+        </div>
+      </header>
+
+      <section class="panel" id="licenseSection">
+        <div class="panel-head">
+          <h2>License & Trial</h2>
+          <span class="pro-badge">Pro</span>
+        </div>
+        <p id="licenseStatus" class="status">Checking license status...</p>
+        <p id="trialStatus" class="muted"></p>
+
+        <div class="field-grid">
+          <label class="field">
+            <span>License key</span>
+            <input id="licenseKeyInput" type="text" placeholder="TABWIPE-XXXX-XXXX" />
+          </label>
+        </div>
+
+        <div class="row">
+          <button id="verifyLicenseBtn" class="button button-primary" type="button">
+            Validate License
+          </button>
+          <button id="refreshLicenseBtn" class="button" type="button">Refresh</button>
+          <button id="clearLicenseBtn" class="button" type="button">Clear Key</button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <h2>Whitelist</h2>
+          <span class="chip">Free</span>
+        </div>
+        <p class="muted">Domains in this list are never auto-cleaned.</p>
+
+        <form id="whitelistForm" class="row">
+          <input
+            id="whitelistDomain"
+            type="text"
+            placeholder="example.com"
+            autocomplete="off"
+            required
+          />
+          <button class="button button-primary" type="submit">Add</button>
+        </form>
+
+        <ul id="whitelistList" class="list"></ul>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <h2>Quick Stats</h2>
+          <span class="chip">Free</span>
+        </div>
+
+        <div class="stats-grid">
+          <article class="stat-card">
+            <span class="label">Deleted today</span>
+            <strong id="todayDeleted">0</strong>
+          </article>
+          <article class="stat-card">
+            <span class="label">Deleted total</span>
+            <strong id="totalDeleted">0</strong>
+          </article>
+        </div>
+
+        <div class="row">
+          <button id="runCleanupNow" class="button" type="button">Run Pending Cleanup</button>
+        </div>
+      </section>
+
+      <section class="panel pro-panel" id="rulesPanel">
+        <div class="panel-head">
+          <h2>Advanced Rules Engine</h2>
+          <span class="pro-badge">Pro</span>
+        </div>
+
+        <p class="muted">Wildcard/regex domain rules and per-cookie handling.</p>
+
+        <div class="field-grid pro-only-group">
+          <label class="field">
+            <span>Wildcard patterns (one per line)</span>
+            <textarea id="wildcardPatterns" rows="3" class="pro-only"></textarea>
+          </label>
+
+          <label class="field">
+            <span>Regex patterns (one per line)</span>
+            <textarea id="regexPatterns" rows="3" class="pro-only"></textarea>
+          </label>
+
+          <label class="field inline-field">
+            <input id="keepSessionCookies" type="checkbox" class="pro-only" />
+            <span>Keep session cookies</span>
+          </label>
+
+          <label class="field inline-field">
+            <input id="deleteTrackingCookiesOnly" type="checkbox" class="pro-only" />
+            <span>Delete tracking cookies only (heuristic)</span>
+          </label>
+
+          <label class="field">
+            <span>Scheduled cleaning age (days)</span>
+            <input id="scheduledCleaningDays" type="number" min="0" class="pro-only" />
+          </label>
+
+          <label class="field">
+            <span>Per-cookie keep list JSON</span>
+            <textarea
+              id="perCookieAllowlist"
+              rows="5"
+              class="pro-only"
+              placeholder='{"example.com":["sessionid","csrftoken"]}'
+            ></textarea>
+          </label>
+        </div>
+
+        <div class="row">
+          <button id="saveRulesBtn" class="button button-primary pro-only" type="button">
+            Save Pro Rules
+          </button>
+        </div>
+
+        <p id="upgradeHint" class="upgrade-hint">
+          Upgrade to Pro (or activate trial) to edit advanced rule controls.
+        </p>
+      </section>
+
+      <section class="panel pro-panel" id="importExportPanel">
+        <div class="panel-head">
+          <h2>Import / Export</h2>
+          <span class="pro-badge">Pro</span>
+        </div>
+
+        <div class="row">
+          <button id="exportConfigBtn" class="button pro-only" type="button">
+            Export Config
+          </button>
+          <label class="button pro-only" for="importConfigInput">Import Config</label>
+          <input id="importConfigInput" type="file" accept="application/json" hidden />
+        </div>
+      </section>
+
+      <section class="panel pro-panel" id="dashboardPanel">
+        <div class="panel-head">
+          <h2>Statistics Dashboard</h2>
+          <span class="pro-badge">Pro</span>
+        </div>
+
+        <p class="muted">Recent cleanup history.</p>
+        <ul id="historyList" class="list history-list"></ul>
+      </section>
+    </main>
+
+    <script type="module" src="options.js"></script>
+  </body>
+</html>

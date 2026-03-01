@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>TabWipe</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <main class="popup">
+      <header class="header">
+        <div>
+          <h1>TabWipe</h1>
+          <p id="domainLabel" class="muted">No active website</p>
+        </div>
+        <span id="licenseBadge" class="pill">Free</span>
+      </header>
+
+      <section class="card summary">
+        <div class="stat">
+          <span class="label">Cookies on this site</span>
+          <strong id="cookieCount">0</strong>
+        </div>
+        <button id="whitelistToggle" class="button button-primary" type="button" disabled>
+          Add to whitelist
+        </button>
+      </section>
+
+      <section class="card">
+        <div class="section-header">
+          <h2>Cookie List</h2>
+        </div>
+        <ul id="cookieList" class="cookie-list"></ul>
+      </section>
+
+      <section class="stats-grid">
+        <article class="card stat-card">
+          <span class="label">Deleted today</span>
+          <strong id="todayDeleted">0</strong>
+        </article>
+        <article class="card stat-card">
+          <span class="label">Deleted total</span>
+          <strong id="totalDeleted">0</strong>
+        </article>
+      </section>
+
+      <section class="card pro-teaser">
+        <div class="section-header">
+          <h2>Pro Features</h2>
+          <span class="pro-badge">Pro</span>
+        </div>
+        <ul class="muted pro-list">
+          <li>Wildcard and regex rules</li>
+          <li>Tracking cookie categories</li>
+          <li>Import/export and scheduled cleanup</li>
+        </ul>
+        <button id="openOptions" class="button button-outline" type="button">
+          Manage Pro in Settings
+        </button>
+      </section>
+    </main>
+
+    <script type="module" src="popup.js"></script>
+  </body>
+</html>

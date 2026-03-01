@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>TabWipe - Your cookies, your rules</title>
+    <style>
+      :root {
+        --primary: #2563eb;
+        --primary-dark: #1d4ed8;
+        --bg: #f8fafc;
+        --surface: #ffffff;
+        --text: #0f172a;
+        --muted: #475569;
+        --border: #dbe3ee;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(circle at top left, rgba(37, 99, 235, 0.12), transparent 45%),
+          var(--bg);
+      }
+
+      .container {
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 22px 14px 48px;
+      }
+
+      .hero {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 22px;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(30px, 5vw, 46px);
+        line-height: 1.05;
+      }
+
+      .hero p {
+        color: var(--muted);
+        margin: 10px 0 0;
+        max-width: 650px;
+        font-size: 17px;
+      }
+
+      .cta {
+        margin-top: 16px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--primary);
+        color: #fff;
+        text-decoration: none;
+        border-radius: 999px;
+        padding: 11px 18px;
+        font-weight: 700;
+      }
+
+      .cta:hover {
+        background: var(--primary-dark);
+      }
+
+      .grid {
+        margin-top: 14px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 12px;
+      }
+
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 14px;
+      }
+
+      .card h2 {
+        margin: 0 0 8px;
+        font-size: 17px;
+      }
+
+      .card p,
+      .card li {
+        color: var(--muted);
+      }
+
+      .compare {
+        margin-top: 14px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        overflow: auto;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 620px;
+      }
+
+      th,
+      td {
+        text-align: left;
+        padding: 11px 12px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      th {
+        background: rgba(37, 99, 235, 0.08);
+      }
+
+      footer {
+        margin-top: 14px;
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #0b1220;
+          --surface: #0f172a;
+          --text: #e2e8f0;
+          --muted: #94a3b8;
+          --border: #1f2937;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="container">
+      <section class="hero">
+        <h1>Your cookies, your rules</h1>
+        <p>
+          TabWipe automatically clears cookies when you close your last tab on a site,
+          helping you stay private by default while keeping trusted sites logged in.
+        </p>
+        <a class="cta" href="https://chrome.google.com/webstore" target="_blank" rel="noreferrer">
+          Install from Chrome Web Store
+        </a>
+      </section>
+
+      <section class="grid">
+        <article class="card">
+          <h2>Privacy-first by design</h2>
+          <p>
+            No trackers, no analytics SDK, and no external dependencies in the core extension.
+            Your configuration stays in Chrome storage.
+          </p>
+        </article>
+        <article class="card">
+          <h2>Works automatically</h2>
+          <p>
+            Close a tab and TabWipe handles cleanup in the background. Add trusted domains
+            to a whitelist in one click.
+          </p>
+        </article>
+        <article class="card">
+          <h2>Power up with Pro</h2>
+          <p>
+            Unlock wildcard/regex rules, tracking-cookie focused cleanup, import/export,
+            scheduled cleanup windows, and detailed history.
+          </p>
+        </article>
+      </section>
+
+      <section class="compare">
+        <table>
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>Free</th>
+              <th>Pro</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Tab close auto-delete</td>
+              <td>Yes</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td>Per-domain whitelist</td>
+              <td>Yes</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td>Wildcard + regex rules</td>
+              <td>No</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td>Cookie category heuristics</td>
+              <td>No</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td>Import / export settings</td>
+              <td>No</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td>Scheduled cleanup rules</td>
+              <td>No</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td>Detailed dashboard</td>
+              <td>No</td>
+              <td>Yes</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <footer>
+        TabWipe respects your browsing privacy and keeps control in your hands.
+      </footer>
+    </main>
+  </body>
+</html>
