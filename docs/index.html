@@ -3,7 +3,9 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>TabWipe - Your cookies, your rules</title>
+    <title>TabWipe — Auto-delete cookies when you close tabs</title>
+    <meta name="description" content="Chrome extension that automatically deletes cookies when you close tabs. MV3 native. Open source. The replacement for Cookie AutoDelete." />
+    <link rel="icon" href="../icons/icon32.png" type="image/png" />
     <style>
       :root {
         --primary: #2563eb;
@@ -13,219 +15,198 @@
         --text: #0f172a;
         --muted: #475569;
         --border: #dbe3ee;
+        --green: #16a34a;
       }
-
-      * {
-        box-sizing: border-box;
-      }
-
+      * { box-sizing: border-box; margin: 0; }
       body {
-        margin: 0;
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        color: var(--text);
-        background:
-          radial-gradient(circle at top left, rgba(37, 99, 235, 0.12), transparent 45%),
-          var(--bg);
+        color: var(--text); background: var(--bg);
+        line-height: 1.6;
       }
+      .container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
 
-      .container {
-        max-width: 980px;
-        margin: 0 auto;
-        padding: 22px 14px 48px;
-      }
+      /* Nav */
+      nav { padding: 16px 0; display: flex; align-items: center; justify-content: space-between; }
+      nav .logo { font-weight: 800; font-size: 20px; color: var(--primary); text-decoration: none; }
+      nav .links { display: flex; gap: 24px; font-size: 14px; }
+      nav .links a { color: var(--muted); text-decoration: none; }
+      nav .links a:hover { color: var(--text); }
 
-      .hero {
-        background: var(--surface);
-        border: 1px solid var(--border);
-        border-radius: 18px;
-        padding: 22px;
-      }
+      /* Hero */
+      .hero { text-align: center; padding: 60px 0 40px; }
+      .hero h1 { font-size: clamp(32px, 5vw, 52px); line-height: 1.1; margin-bottom: 16px; }
+      .hero h1 span { color: var(--primary); }
+      .hero p { color: var(--muted); font-size: 18px; max-width: 600px; margin: 0 auto 24px; }
+      .badge { display: inline-block; background: #dbeafe; color: var(--primary); font-size: 13px; font-weight: 600; padding: 4px 12px; border-radius: 999px; margin-bottom: 16px; }
 
-      h1 {
-        margin: 0;
-        font-size: clamp(30px, 5vw, 46px);
-        line-height: 1.05;
-      }
+      .cta-group { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+      .btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; border-radius: 999px; font-weight: 700; font-size: 15px; text-decoration: none; transition: all 0.2s; }
+      .btn-primary { background: var(--primary); color: #fff; }
+      .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); }
+      .btn-outline { border: 2px solid var(--border); color: var(--text); background: var(--surface); }
+      .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
 
-      .hero p {
-        color: var(--muted);
-        margin: 10px 0 0;
-        max-width: 650px;
-        font-size: 17px;
-      }
+      /* How it works */
+      .section { padding: 48px 0; }
+      .section h2 { font-size: 28px; text-align: center; margin-bottom: 32px; }
+      .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+      .step { text-align: center; padding: 24px; }
+      .step-num { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; background: var(--primary); color: #fff; font-weight: 800; margin-bottom: 12px; }
+      .step h3 { margin-bottom: 8px; }
+      .step p { color: var(--muted); font-size: 14px; }
 
-      .cta {
-        margin-top: 16px;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        background: var(--primary);
-        color: #fff;
-        text-decoration: none;
-        border-radius: 999px;
-        padding: 11px 18px;
-        font-weight: 700;
-      }
+      /* Pricing */
+      .pricing { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; max-width: 700px; margin: 0 auto; }
+      .price-card { background: var(--surface); border: 2px solid var(--border); border-radius: 16px; padding: 32px 24px; position: relative; }
+      .price-card.featured { border-color: var(--primary); }
+      .price-card.featured::before { content: "BEST VALUE"; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--primary); color: #fff; font-size: 11px; font-weight: 700; padding: 4px 12px; border-radius: 999px; }
+      .price-card h3 { font-size: 20px; margin-bottom: 4px; }
+      .price { font-size: 40px; font-weight: 800; margin: 12px 0; }
+      .price small { font-size: 14px; color: var(--muted); font-weight: 400; }
+      .price-card ul { list-style: none; padding: 0; margin: 16px 0 24px; }
+      .price-card li { padding: 6px 0; font-size: 14px; color: var(--muted); }
+      .price-card li::before { content: "✓ "; color: var(--green); font-weight: 700; }
+      .price-card li.disabled { opacity: 0.4; }
+      .price-card li.disabled::before { content: "— "; color: var(--muted); }
 
-      .cta:hover {
-        background: var(--primary-dark);
-      }
+      /* FAQ */
+      .faq { max-width: 700px; margin: 0 auto; }
+      .faq-item { border-bottom: 1px solid var(--border); padding: 20px 0; }
+      .faq-item h3 { font-size: 16px; margin-bottom: 8px; }
+      .faq-item p { color: var(--muted); font-size: 14px; }
 
-      .grid {
-        margin-top: 14px;
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-        gap: 12px;
-      }
+      /* Footer */
+      footer { padding: 32px 0; border-top: 1px solid var(--border); margin-top: 48px; text-align: center; color: var(--muted); font-size: 13px; }
+      footer a { color: var(--muted); }
 
-      .card {
-        background: var(--surface);
-        border: 1px solid var(--border);
-        border-radius: 14px;
-        padding: 14px;
-      }
-
-      .card h2 {
-        margin: 0 0 8px;
-        font-size: 17px;
-      }
-
-      .card p,
-      .card li {
-        color: var(--muted);
-      }
-
-      .compare {
-        margin-top: 14px;
-        background: var(--surface);
-        border: 1px solid var(--border);
-        border-radius: 14px;
-        overflow: auto;
-      }
-
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        min-width: 620px;
-      }
-
-      th,
-      td {
-        text-align: left;
-        padding: 11px 12px;
-        border-bottom: 1px solid var(--border);
-      }
-
-      th {
-        background: rgba(37, 99, 235, 0.08);
-      }
-
-      footer {
-        margin-top: 14px;
-        color: var(--muted);
-        font-size: 13px;
+      @media (max-width: 640px) {
+        .steps { grid-template-columns: 1fr; }
+        .pricing { grid-template-columns: 1fr; }
       }
 
       @media (prefers-color-scheme: dark) {
-        :root {
-          --bg: #0b1220;
-          --surface: #0f172a;
-          --text: #e2e8f0;
-          --muted: #94a3b8;
-          --border: #1f2937;
-        }
+        :root { --bg: #0b1220; --surface: #0f172a; --text: #e2e8f0; --muted: #94a3b8; --border: #1f2937; }
+        .badge { background: #1e3a5f; }
       }
     </style>
   </head>
   <body>
-    <main class="container">
+    <div class="container">
+      <nav>
+        <a href="/" class="logo">🧹 TabWipe</a>
+        <div class="links">
+          <a href="#pricing">Pricing</a>
+          <a href="#faq">FAQ</a>
+          <a href="https://github.com/4ier/tabwipe" target="_blank">GitHub</a>
+          <a href="privacy.html">Privacy</a>
+        </div>
+      </nav>
+
       <section class="hero">
-        <h1>Your cookies, your rules</h1>
-        <p>
-          TabWipe automatically clears cookies when you close your last tab on a site,
-          helping you stay private by default while keeping trusted sites logged in.
-        </p>
-        <a class="cta" href="https://chrome.google.com/webstore" target="_blank" rel="noreferrer">
-          Install from Chrome Web Store
-        </a>
+        <div class="badge">MV3 Native · Open Source</div>
+        <h1>Your cookies, <span>your rules</span></h1>
+        <p>TabWipe automatically deletes cookies when you close tabs — the feature Chrome should have built in. The MV3 replacement for Cookie AutoDelete.</p>
+        <div class="cta-group">
+          <a class="btn btn-primary" href="#" id="installBtn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-5"/></svg>
+            Install Free — Chrome Web Store
+          </a>
+          <a class="btn btn-outline" href="https://github.com/4ier/tabwipe" target="_blank">
+            ⭐ Star on GitHub
+          </a>
+        </div>
       </section>
 
-      <section class="grid">
-        <article class="card">
-          <h2>Privacy-first by design</h2>
-          <p>
-            No trackers, no analytics SDK, and no external dependencies in the core extension.
-            Your configuration stays in Chrome storage.
-          </p>
-        </article>
-        <article class="card">
-          <h2>Works automatically</h2>
-          <p>
-            Close a tab and TabWipe handles cleanup in the background. Add trusted domains
-            to a whitelist in one click.
-          </p>
-        </article>
-        <article class="card">
-          <h2>Power up with Pro</h2>
-          <p>
-            Unlock wildcard/regex rules, tracking-cookie focused cleanup, import/export,
-            scheduled cleanup windows, and detailed history.
-          </p>
-        </article>
+      <section class="section">
+        <h2>How it works</h2>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <h3>Close a tab</h3>
+            <p>TabWipe detects when you close a tab and checks if you still have that site open elsewhere.</p>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <h3>Cookies deleted</h3>
+            <p>If no other tabs are open for that domain, cookies are automatically cleaned up after a short delay.</p>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <h3>Whitelist the rest</h3>
+            <p>One click to whitelist sites you want to stay logged into. Synced across all your Chrome devices.</p>
+          </div>
+        </div>
       </section>
 
-      <section class="compare">
-        <table>
-          <thead>
-            <tr>
-              <th>Feature</th>
-              <th>Free</th>
-              <th>Pro</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Tab close auto-delete</td>
-              <td>Yes</td>
-              <td>Yes</td>
-            </tr>
-            <tr>
-              <td>Per-domain whitelist</td>
-              <td>Yes</td>
-              <td>Yes</td>
-            </tr>
-            <tr>
-              <td>Wildcard + regex rules</td>
-              <td>No</td>
-              <td>Yes</td>
-            </tr>
-            <tr>
-              <td>Cookie category heuristics</td>
-              <td>No</td>
-              <td>Yes</td>
-            </tr>
-            <tr>
-              <td>Import / export settings</td>
-              <td>No</td>
-              <td>Yes</td>
-            </tr>
-            <tr>
-              <td>Scheduled cleanup rules</td>
-              <td>No</td>
-              <td>Yes</td>
-            </tr>
-            <tr>
-              <td>Detailed dashboard</td>
-              <td>No</td>
-              <td>Yes</td>
-            </tr>
-          </tbody>
-        </table>
+      <section class="section" id="pricing">
+        <h2>Simple pricing</h2>
+        <div class="pricing">
+          <div class="price-card">
+            <h3>Free</h3>
+            <div class="price">$0 <small>forever</small></div>
+            <ul>
+              <li>Auto-delete cookies on tab close</li>
+              <li>Per-domain whitelist</li>
+              <li>Live cookie count badge</li>
+              <li>Quick deletion stats</li>
+              <li>Dark mode support</li>
+              <li class="disabled">Wildcard/regex rules</li>
+              <li class="disabled">Tracking cookie detection</li>
+              <li class="disabled">Scheduled cleanup</li>
+            </ul>
+            <a class="btn btn-outline" href="#" style="width:100%;justify-content:center;">Install Free</a>
+          </div>
+          <div class="price-card featured">
+            <h3>Pro</h3>
+            <div class="price">$3.99 <small>one-time</small></div>
+            <ul>
+              <li>Everything in Free</li>
+              <li>Wildcard & regex domain rules</li>
+              <li>Smart tracking cookie detection</li>
+              <li>Per-cookie granularity</li>
+              <li>Scheduled cleanup (age-based)</li>
+              <li>Import/export configuration</li>
+              <li>Detailed statistics dashboard</li>
+              <li>Priority support</li>
+            </ul>
+            <a class="btn btn-primary" href="#" style="width:100%;justify-content:center;" id="buyBtn">Buy Pro — $3.99</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="faq">
+        <h2>FAQ</h2>
+        <div class="faq">
+          <div class="faq-item">
+            <h3>Is this the replacement for Cookie AutoDelete?</h3>
+            <p>Yes. CAD stopped working when Chrome forced the MV3 migration. TabWipe is built from scratch for MV3 — no legacy code, no workarounds.</p>
+          </div>
+          <div class="faq-item">
+            <h3>Will I get logged out of everything?</h3>
+            <p>Only sites you don't whitelist. Add your email, bank, and frequently used sites to the whitelist in one click — those cookies are never touched.</p>
+          </div>
+          <div class="faq-item">
+            <h3>What about service worker limitations?</h3>
+            <p>TabWipe never relies on in-memory state. Every time the service worker wakes up, it rebuilds its tab tracking from chrome.tabs.query(). A fallback alarm sweep runs every 5 minutes to catch anything missed.</p>
+          </div>
+          <div class="faq-item">
+            <h3>Do you collect any data?</h3>
+            <p>Zero. No analytics, no telemetry, no phone-home. All data stays in your browser. The code is <a href="https://github.com/4ier/tabwipe">open source</a> — verify it yourself.</p>
+          </div>
+          <div class="faq-item">
+            <h3>Why is Pro a one-time payment?</h3>
+            <p>Because subscriptions for browser extensions are annoying. Pay once, use forever. All future Pro features included.</p>
+          </div>
+          <div class="faq-item">
+            <h3>Can I get a refund?</h3>
+            <p>Yes, within 30 days. No questions asked. Email us or open a GitHub issue.</p>
+          </div>
+        </div>
       </section>
 
       <footer>
-        TabWipe respects your browsing privacy and keeps control in your hands.
+        <p>TabWipe · <a href="https://github.com/4ier/tabwipe">Open Source</a> · <a href="privacy.html">Privacy Policy</a> · Made with 🤖 by <a href="https://github.com/4ier">4ier</a></p>
       </footer>
-    </main>
+    </div>
   </body>
 </html>

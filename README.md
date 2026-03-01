@@ -1,77 +1,89 @@
-# TabWipe
+# 🧹 TabWipe
 
-TabWipe is a Chrome Manifest V3 extension that automatically deletes cookies when the last tab for a domain is closed, while letting users keep trusted domains in a whitelist.
+**Auto-delete cookies when you close tabs.** The MV3 replacement for Cookie AutoDelete.
+
+[![Chrome Web Store](https://img.shields.io/badge/Chrome%20Web%20Store-Install-blue?logo=googlechrome)](https://chrome.google.com/webstore)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/4ier/tabwipe)](https://github.com/4ier/tabwipe/stargazers)
+
+## Why?
+
+[Cookie AutoDelete](https://github.com/nicolecomputer/cookie-autodelete) was the go-to extension for automatic cookie cleanup. When Chrome killed Manifest V2, CAD died with it — their README literally says *"MV3 makes this extension impossible as designed."*
+
+TabWipe is built from scratch for MV3. No legacy code, no workarounds.
+
+## How it works
+
+1. **Close a tab** → TabWipe checks if you still have that domain open in another tab
+2. **No other tabs?** → Cookies for that domain are automatically deleted after a 5-second delay
+3. **Whitelisted?** → Cookies are kept safe
+
+That's it. Simple, reliable, private.
+
+## Technical approach
+
+The key insight: CAD's architecture was "impossible" to port because it relied on persistent background pages and in-memory state. TabWipe takes a different approach:
+
+- **`chrome.tabs.onRemoved`** — Event-driven, wakes the service worker on tab close
+- **`chrome.tabs.query({})`** — Rebuilds state from scratch every time, never trusts memory
+- **`chrome.alarms`** — Fallback sweep every 5 min catches anything missed during SW sleep
+- **`chrome.storage`** — All config persists across SW restarts
+
+Core logic is ~500 lines. Service worker goes to sleep? Fine, everything rebuilds on wake.
 
 ## Features
 
-### Free (Core)
-- Auto-delete cookies on tab close (`5s` delay)
-- Domain whitelist synced with `chrome.storage.sync`
-- Popup UI with:
-  - active tab cookie count/list
-  - one-click whitelist toggle
-  - quick stats (today + total deleted)
-- Badge count for active tab cookies
-- Fallback sweep (`chrome.alarms` every 5 minutes)
+### Free
+- ✅ Auto-delete cookies on tab close
+- ✅ Per-domain whitelist (synced across devices)
+- ✅ Live cookie count badge
+- ✅ Deletion statistics
+- ✅ Dark/light mode
 
-### Pro (Gated)
-- Wildcard + regex rules
-- Cookie-category heuristics (tracking-only cleanup)
-- Import/export settings
-- Scheduled cleanup age rules
-- Per-cookie allowlist
-- Detailed cleanup history dashboard
+### Pro ($3.99 one-time)
+- ✅ Wildcard & regex domain rules
+- ✅ Smart tracking cookie detection
+- ✅ Per-cookie granularity
+- ✅ Scheduled cleanup (age-based rules)
+- ✅ Import/export configuration
+- ✅ Detailed statistics dashboard
 
-## Technical Notes
-- Manifest V3 service worker (`background.js`)
-- Runtime state in `chrome.storage.local`
-- User config in `chrome.storage.sync`
-- Open-tab domain map rebuilt via `chrome.tabs.query({})` on service worker start
-- License status checked on install/startup and every 24h
-- 7-day Pro trial included
+## Install
 
-## Load Unpacked Extension
-1. Open Chrome and navigate to `chrome://extensions`.
-2. Enable **Developer mode**.
-3. Click **Load unpacked**.
-4. Select this project directory (`tabwipe/`).
+### Chrome Web Store
+[Install TabWipe →](https://chrome.google.com/webstore) *(link coming soon)*
 
-## Project Structure
+### From source
+```bash
+git clone https://github.com/4ier/tabwipe.git
+```
+1. Open `chrome://extensions`
+2. Enable "Developer mode"
+3. Click "Load unpacked" → select the `tabwipe` folder
+
+## Privacy
+
+**Zero data collection.** No analytics, no telemetry, no phone-home. All data stays in your browser. [Full privacy policy →](https://4ier.github.io/tabwipe/privacy.html)
+
+## Project structure
 
 ```
 tabwipe/
-├── manifest.json
-├── background.js
-├── popup/
-│   ├── popup.html
-│   ├── popup.js
-│   └── popup.css
-├── options/
-│   ├── options.html
-│   ├── options.js
-│   └── options.css
+├── manifest.json          # MV3 manifest
+├── background.js          # Service worker (~540 lines)
 ├── lib/
-│   ├── cookie-manager.js
-│   ├── tab-tracker.js
-│   ├── whitelist.js
-│   ├── rules-engine.js
-│   ├── license.js
-│   ├── stats.js
-│   └── storage.js
-├── icons/
-│   ├── icon-template.svg
-│   ├── icon16.svg
-│   ├── icon32.svg
-│   ├── icon48.svg
-│   ├── icon128.svg
-│   ├── icon16.png
-│   ├── icon32.png
-│   ├── icon48.png
-│   └── icon128.png
-└── docs/
-    └── index.html
+│   ├── cookie-manager.js  # Cookie CRUD
+│   ├── tab-tracker.js     # Open tab → domain mapping
+│   ├── whitelist.js       # Whitelist management
+│   ├── rules-engine.js    # Pro: advanced rules
+│   ├── license.js         # Pro: license validation
+│   ├── stats.js           # Deletion statistics
+│   └── storage.js         # Storage abstraction
+├── popup/                 # Extension popup UI
+├── options/               # Settings page
+└── docs/                  # Landing page (GitHub Pages)
 ```
 
-## License Endpoint Stub
-The Pro validation endpoint is configurable in `lib/license.js` via `LICENSE_CONFIG.endpointUrl`.
+## License
 
+MIT
