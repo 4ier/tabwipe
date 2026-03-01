@@ -1,0 +1,30 @@
+name: Package Extension
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Package extension
+        run: |
+          zip -r tabwipe-extension.zip . \
+            -x ".git/*" ".github/*" "store/*" "docs/*" "TASK.md" "README.md" "*.svg" "icons/tabwipe-icon.png"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tabwipe-extension
+          path: tabwipe-extension.zip
+
+      - name: Create Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: tabwipe-extension.zip
+          generate_release_notes: true
